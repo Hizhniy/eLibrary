@@ -5,7 +5,7 @@ namespace eLibrary.BLL
 
     public class UserRepository
     {
-        DAL.AppContext db = new DAL.AppContext();
+        private readonly DAL.AppContext db;// = new DAL.AppContext();
         public UserRepository(DAL.AppContext db)
         {
             this.db = db;

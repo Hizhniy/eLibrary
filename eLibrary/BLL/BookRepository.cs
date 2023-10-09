@@ -6,7 +6,7 @@ namespace eLibrary.BLL
 {
     public class BookRepository
     {
-        DAL.AppContext db = new DAL.AppContext();
+        private readonly DAL.AppContext db;// = new DAL.AppContext();
         public BookRepository(DAL.AppContext db)
         {
             this.db = db;
@@ -44,7 +44,7 @@ namespace eLibrary.BLL
             db.SaveChanges();
         }
 
-        public List<Book> FindGenreYears(DAL.AppContext db, string genre, int fromYear, int toYear)
+        public List<Book> FindGenreYears(string genre, int fromYear, int toYear)
         {
             return db.Books.Where(b => (b.Genre.ToUpper().Contains(genre)) && (b.YearOfPublication >= fromYear) && (b.YearOfPublication <= toYear)).ToList();
             //return (from book in db.Books
@@ -52,48 +52,48 @@ namespace eLibrary.BLL
             //       select book).ToList();
         }
 
-        public int CountBooksByAuthor(DAL.AppContext db, string author)
+        public int CountBooksByAuthor(string author)
         {
             return db.Books.Where(b => b.Author.ToUpper() == author).Count();
         }
 
-        public int CountBooksByGenre(DAL.AppContext db, string genre)
+        public int CountBooksByGenre(string genre)
         {
             return db.Books.Where(b => b.Genre.ToUpper().Contains(genre)).Count();
         }
 
-        public bool FindAuthorTitle(DAL.AppContext db, string author, string title)
+        public bool FindAuthorTitle(string author, string title)
         {
             var isBook = db.Books.FirstOrDefault(b => (b.Author.ToUpper() == author) && (b.Title.ToUpper() == title));
             if (isBook == null) return false;
             else return true;
         }
 
-        public bool IsBookAvailable(DAL.AppContext db, string author, string title)
+        public bool IsBookAvailable(string author, string title)
         {
             var isBook = db.Books.FirstOrDefault(b => (b.Author.ToUpper() == author) && (b.Title.ToUpper() == title));
             if (isBook.UserId == null) return false;
             else return true;
         }
 
-        public int CountBooksByReader(DAL.AppContext db, string readerName)
+        public int CountBooksByReader(string readerName)
         {
             var readersList = db.Users.Where(u => u.Name.ToUpper() == readerName).Select(u => u.Id).ToList();
             if (readersList.IsNullOrEmpty()) return 0;
             else return db.Books.Where(b => b.UserId == readersList[0]).Count();
         }
 
-        public Book LastBook(DAL.AppContext db)
+        public Book LastBook()
         {
             var booksList = db.Books.OrderByDescending(b => b.YearOfPublication).ToList();
             return booksList[0];
         }
 
-        public List<Book> BooksListByTitle(DAL.AppContext db)
+        public List<Book> BooksListByTitle()
         {
             return db.Books.OrderBy(b => b.Title).ToList();
         }
-        public List<Book> BooksListByYearOfPublication(DAL.AppContext db)
+        public List<Book> BooksListByYearOfPublication()
         {
             return db.Books.OrderByDescending(b => b.YearOfPublication).ToList();
         }

@@ -49,7 +49,7 @@ namespace eLibrary
                                 if (!int.TryParse(Console.ReadLine(), out int fromYear)) fromYear = int.MinValue;
                                 Console.Write("Укажите год окончания поиска: ");
                                 if (!int.TryParse(Console.ReadLine(), out int toYear)) toYear = int.MaxValue;
-                                var booksList = bookRepository.FindGenreYears(db, genre, fromYear, toYear);
+                                var booksList = bookRepository.FindGenreYears(genre, fromYear, toYear);
                                 foreach (Book book in booksList)
                                 {
                                     Console.WriteLine($"Автор: {book.Author}; Наименование: {book.Title}; Год публикации: {book.YearOfPublication}");
@@ -62,7 +62,7 @@ namespace eLibrary
                                 Console.Write("Укажите автора: ");
                                 string author = Console.ReadLine().Trim().ToUpper();
                                 if (author.IsNullOrEmpty()) author = "";
-                                Console.WriteLine($"Количество: {bookRepository.CountBooksByAuthor(db, author)}");
+                                Console.WriteLine($"Количество: {bookRepository.CountBooksByAuthor(author)}");
                                 break;
                             }
                         case "3":
@@ -70,7 +70,7 @@ namespace eLibrary
                                 Console.Write("Укажите жанр: ");
                                 string genre = Console.ReadLine().Trim().ToUpper();
                                 if (genre.IsNullOrEmpty()) genre = "";
-                                Console.WriteLine($"Количество: {bookRepository.CountBooksByGenre(db, genre)}");
+                                Console.WriteLine($"Количество: {bookRepository.CountBooksByGenre(genre)}");
                                 break;
                             }
                         case "4":
@@ -81,7 +81,7 @@ namespace eLibrary
                                 Console.Write("Укажите название: ");
                                 string title = Console.ReadLine().Trim().ToUpper();
                                 if (title.IsNullOrEmpty()) title = "";
-                                if (bookRepository.FindAuthorTitle(db, author, title)) Console.WriteLine("Такая книга у нас в библиотеке есть!");
+                                if (bookRepository.FindAuthorTitle(author, title)) Console.WriteLine("Такая книга у нас в библиотеке есть!");
                                 else Console.WriteLine("Такой книги у нас в библиотеке нет...");
                                 break;
                             }
@@ -93,9 +93,9 @@ namespace eLibrary
                                 Console.Write("Укажите название: ");
                                 string title = Console.ReadLine().Trim().ToUpper();
                                 if (title.IsNullOrEmpty()) title = "";
-                                if (bookRepository.FindAuthorTitle(db, author, title))
+                                if (bookRepository.FindAuthorTitle(author, title))
                                 {
-                                    if (bookRepository.IsBookAvailable(db, author, title)) Console.WriteLine("Эта книга пока находится у читателя");
+                                    if (bookRepository.IsBookAvailable(author, title)) Console.WriteLine("Эта книга пока находится у читателя");
                                     else Console.WriteLine("Эта книга доступна!");
                                 }
                                 else Console.WriteLine("Такой книги у нас в библиотеке нет...");
@@ -106,18 +106,18 @@ namespace eLibrary
                                 Console.Write("Как зовут читателя? ");
                                 string readerName = Console.ReadLine().Trim().ToUpper();
                                 if (readerName.IsNullOrEmpty()) readerName = "";
-                                Console.WriteLine($"Количество книг на руках: {bookRepository.CountBooksByReader(db, readerName)}");
+                                Console.WriteLine($"Количество книг на руках: {bookRepository.CountBooksByReader(readerName)}");
                                 break;
                             }
                         case "7":
                             {
-                                var book = bookRepository.LastBook(db);
+                                var book = bookRepository.LastBook();
                                 Console.WriteLine($"Автор: {book.Author}; Наименование: {book.Title}; Год публикации: {book.YearOfPublication}");
                                 break;
                             }
                         case "8":
                             {
-                                var booksList = bookRepository.BooksListByTitle(db);
+                                var booksList = bookRepository.BooksListByTitle();
                                 foreach (Book book in booksList)
                                 {
                                     Console.WriteLine($"Автор: {book.Author}; Наименование: {book.Title}; Год публикации: {book.YearOfPublication}");                                    
@@ -126,7 +126,7 @@ namespace eLibrary
                             }
                         case "9":
                             {
-                                var booksList = bookRepository.BooksListByYearOfPublication(db);
+                                var booksList = bookRepository.BooksListByYearOfPublication();
                                 foreach (Book book in booksList)
                                 {
                                     Console.WriteLine($"Автор: {book.Author}; Наименование: {book.Title}; Год публикации: {book.YearOfPublication}");
