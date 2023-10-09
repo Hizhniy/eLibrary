@@ -14,7 +14,9 @@ namespace eLibrary.BLL
 
         public Book GetBook(int id)
         {
-            return db.Books.FirstOrDefault(b => b.Id == id);
+            var book = db.Books.FirstOrDefault(b => b.Id == id);
+            if (book == null) return new Book();
+            else return book;
         }
 
         public List<Book> GetAllBooks()
@@ -31,17 +33,26 @@ namespace eLibrary.BLL
         public bool DeleteBook(int id)
         {
             var book = db.Books.FirstOrDefault(b => b.Id == id);
-            db.Books.Remove(book);
-            db.SaveChanges();
-            // учесть удаление из связанной таблицы и проверку, что все ок
-            return true;
+            if (book == null) return false;
+            else
+            {
+                db.Books.Remove(book);
+                db.SaveChanges();
+                // учесть удаление из связанной таблицы и проверку, что все ок
+                return true;
+            }
         }
 
-        public void UpdateBookYearOfPublication(int id, int? year)
+        public bool UpdateBookYearOfPublication(int id, int? year)
         {
             var book = db.Books.FirstOrDefault(b => b.Id == id);
-            book.YearOfPublication = year;
-            db.SaveChanges();
+            if (book == null) return false;
+            else
+            {
+                book.YearOfPublication = year;
+                db.SaveChanges();
+                return true;
+            }
         }
 
         public List<Book> FindGenreYears(string genre, int fromYear, int toYear)
